@@ -1,0 +1,52 @@
+package com.ataulm.skipper.settings
+
+import android.content.Intent
+import android.content.pm.PackageManager
+import android.content.pm.ResolveInfo
+import com.ataulm.skipper.App
+import com.ataulm.skipper.AppPackageName
+import com.example.BuildConfig
+
+class InstalledAppsService(private val packageManager: PackageManager) {
+
+    fun getApps(): List<App> {
+        val installedApps = mutableListOf<App>()
+        for (resolveInfo in launchableActivities()) {
+            val app = app(resolveInfo)
+            if (app.packageName.packageName != BuildConfig.APPLICATION_ID) {
+                installedApps.add(app)
+            }
+        }
+        return installedApps
+    }
+
+    private fun launchableActivities(): List<ResolveInfo> {
+        val activities = mutableListOf<ResolveInfo>()
+        activities.addAll(getResolveInfos(Intent(Intent.ACTION_MAIN).addCategory(Intent.CATEGORY_LAUNCHER)))
+        activities.addAll(getResolveInfos(Intent(Intent.ACTION_MAIN).addCategory(Intent.CATEGORY_LEANBACK_LAUNCHER)))
+        return activities
+    }
+
+    private fun getResolveInfos(intent: Intent): List<ResolveInfo> {
+        return packageManager.queryIntentActivities(intent, 0)
+    }
+
+    private fun app(resolveInfo: ResolveInfo): App {
+        val applicationInfo = resolveInfo.activityInfo.applicationInfo
+        val packageName = resolvePackageName(resolveInfo)
+
+        val name = packageManager.getApplicationLabel(applicationInfo).toString()
+        val icon = packageManager.getApplicationIcon(applicationInfo)
+
+        return App(name, icon, AppPackageName(packageName))
+    }
+
+    private fun resolvePackageName(resolveInfo: ResolveInfo): String {
+        val packageName: String? = resolveInfo.activityInfo.packageName
+        return if (packageName == null) {
+            resolveInfo.resolvePackageName
+        } else {
+            packageName
+        }
+    }
+}

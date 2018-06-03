@@ -1,9 +1,13 @@
-package com.example
+package com.ataulm.skipper.settings
 
 import android.arch.lifecycle.Observer
+import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
+import com.ataulm.skipper.ClickableWord
+import com.ataulm.skipper.SkipperSharedPrefs
+import com.example.R
 import kotlinx.android.synthetic.main.activity_settings.*
 
 class SettingsActivity : AppCompatActivity() {
@@ -12,9 +16,14 @@ class SettingsActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_settings)
 
-        val repository = ClickableWordsRepository(ClickableWordsSharedPrefs.create(this))
+        val repository = ClickableWordsRepository(SkipperSharedPrefs.create(this))
         clickableWordsRecyclerView.layoutManager = LinearLayoutManager(this)
         clickableWordsRecyclerView.adapter = ClickableWordsAdapter(object : ClickableWordsAdapter.Callback {
+
+            override fun onClickConfigure(word: ClickableWord) {
+                startActivity(Intent(this@SettingsActivity, ConfigureEntriesActivity::class.java)
+                        .putExtra(ConfigureEntriesActivity.EXTRA_CLICKABLE_WORD, word.word))
+            }
 
             override fun onClickDelete(word: ClickableWord) {
                 repository.delete(word)

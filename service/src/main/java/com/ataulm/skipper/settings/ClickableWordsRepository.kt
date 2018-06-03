@@ -1,9 +1,11 @@
-package com.example
+package com.ataulm.skipper.settings
 
 import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.MutableLiveData
+import com.ataulm.skipper.ClickableWord
+import com.ataulm.skipper.SkipperSharedPrefs
 
-class ClickableWordsRepository(private val sharedPrefs: ClickableWordsSharedPrefs) {
+class ClickableWordsRepository(private val sharedPrefs: SkipperSharedPrefs) {
 
     fun clickableWords(): LiveData<List<ClickableWord>> {
         return ClickableWordsLiveData(sharedPrefs)
@@ -17,7 +19,7 @@ class ClickableWordsRepository(private val sharedPrefs: ClickableWordsSharedPref
         sharedPrefs.delete(clickableWord)
     }
 
-    class ClickableWordsLiveData(private val sharedPrefs: ClickableWordsSharedPrefs) : MutableLiveData<List<ClickableWord>>() {
+    class ClickableWordsLiveData(private val sharedPrefs: SkipperSharedPrefs) : MutableLiveData<List<ClickableWord>>() {
 
         override fun onActive() {
             super.onActive()
@@ -30,7 +32,7 @@ class ClickableWordsRepository(private val sharedPrefs: ClickableWordsSharedPref
             super.onInactive()
         }
 
-        private val callback = object : ClickableWordsSharedPrefs.Callback {
+        private val callback = object : SkipperSharedPrefs.Callback {
             override fun onChange(clickableWords: List<ClickableWord>) {
                 value = clickableWords
             }

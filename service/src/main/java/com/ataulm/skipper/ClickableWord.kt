@@ -1,3 +1,3 @@
-package com.example
+package com.ataulm.skipper
 
 data class ClickableWord(val word: String)
