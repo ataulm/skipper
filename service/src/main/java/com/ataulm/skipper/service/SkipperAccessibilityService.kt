@@ -6,12 +6,9 @@ import android.view.accessibility.AccessibilityNodeInfo
 import com.ataulm.skipper.ClickableWord
 import com.ataulm.skipper.SkipperSharedPrefs
 
-/**
- * Watches for window changes to scan for a "Continue watching" button to click it for you.
- */
-class ContinueWatchingService : AccessibilityService() {
+class SkipperAccessibilityService : AccessibilityService() {
 
-    // TODO: ContinueWatchingRepository, rather than direct access
+    // TODO: SkipperRepository, rather than direct access to sharedPrefs
     private lateinit var skipperSharedPrefs: SkipperSharedPrefs
     private var clickableWords = emptyList<ClickableWord>()
 
@@ -30,7 +27,7 @@ class ContinueWatchingService : AccessibilityService() {
     private val callback = object : SkipperSharedPrefs.Callback {
 
         override fun onChange(clickableWords: List<ClickableWord>) {
-            this@ContinueWatchingService.clickableWords = clickableWords
+            this@SkipperAccessibilityService.clickableWords = clickableWords
         }
     }
 
