@@ -2,23 +2,20 @@ package com.ataulm.skipper.settings
 
 import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.MutableLiveData
-import com.ataulm.skipper.App
-import com.ataulm.skipper.AppPackageName
-import com.ataulm.skipper.ClickableWord
-import com.ataulm.skipper.SkipperSharedPrefs
+import com.ataulm.skipper.*
 
-class ConfigureEntriesRepository(private val installedAppsService: InstalledAppsService, private val sharedPrefs: SkipperSharedPrefs) {
+class ConfigureEntriesRepository(private val installedAppsService: InstalledAppsService, private val skipperPersistence: SharedPreferencesSkipperPersistence) {
 
     fun apps(): LiveData<List<App>> {
         return AppsLiveData(installedAppsService)
     }
 
     fun appsAssociatedWith(word: ClickableWord): LiveData<List<AppPackageName>> {
-        return AssociatedAppsLiveData(sharedPrefs, word)
+        return AssociatedAppsLiveData(skipperPersistence, word)
     }
 
     fun updateAppsAssociatedWithWord(clickableWord: ClickableWord, packageNames: Set<AppPackageName>) {
-        sharedPrefs.updateAppsAssociatedWithWord(clickableWord, packageNames)
+        skipperPersistence.updateAppsAssociatedWithWord(clickableWord, packageNames)
     }
 
     private class AppsLiveData(private val installedAppsService: InstalledAppsService) : MutableLiveData<List<App>>() {
@@ -31,11 +28,11 @@ class ConfigureEntriesRepository(private val installedAppsService: InstalledApps
         }
     }
 
-    private class AssociatedAppsLiveData(private val sharedPrefs: SkipperSharedPrefs, private val word: ClickableWord) : MutableLiveData<List<AppPackageName>>() {
+    private class AssociatedAppsLiveData(private val skipperPersistence: SharedPreferencesSkipperPersistence, private val word: ClickableWord) : MutableLiveData<List<AppPackageName>>() {
 
         override fun onActive() {
             super.onActive()
-            value = sharedPrefs.appsAssociatedWith(word)
+            value = skipperPersistence.appsAssociatedWith(word)
         }
     }
 }

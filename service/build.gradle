@@ -47,6 +47,7 @@ dependencies {
         exclude group: 'com.android.support', module: 'support-annotations'
     }
 
+    testImplementation libraries.androidArchTesting
     testImplementation libraries.googleTruth
     testImplementation libraries.jUnit
     testImplementation libraries.mockitoCore

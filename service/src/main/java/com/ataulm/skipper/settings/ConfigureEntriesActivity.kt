@@ -5,7 +5,8 @@ import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import com.ataulm.skipper.AppPackageName
 import com.ataulm.skipper.ClickableWord
-import com.ataulm.skipper.SkipperSharedPrefs
+import com.ataulm.skipper.InstalledAppsService
+import com.ataulm.skipper.SharedPreferencesSkipperPersistence
 import com.example.R
 import kotlinx.android.synthetic.main.activity_configure_entries.*
 
@@ -24,7 +25,7 @@ class ConfigureEntriesActivity : AppCompatActivity() {
 
         val clickableWord = ClickableWord(intent.getStringExtra(EXTRA_CLICKABLE_WORD))
         title = "Configure \"${clickableWord.word}\"" // TODO: string resources
-        val repository = ConfigureEntriesRepository(InstalledAppsService(packageManager), SkipperSharedPrefs.create(this))
+        val repository = ConfigureEntriesRepository(InstalledAppsService(packageManager), SharedPreferencesSkipperPersistence.create(this))
         viewModel = ConfigureEntriesViewModel(clickableWord, repository)
 
         configureEntriesPackagesRecyclerView.adapter = PackagesAdapter(object : PackagesAdapter.Callback {

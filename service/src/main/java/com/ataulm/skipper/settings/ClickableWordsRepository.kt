@@ -3,36 +3,36 @@ package com.ataulm.skipper.settings
 import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.MutableLiveData
 import com.ataulm.skipper.ClickableWord
-import com.ataulm.skipper.SkipperSharedPrefs
+import com.ataulm.skipper.SkipperPersistence
 
-class ClickableWordsRepository(private val sharedPrefs: SkipperSharedPrefs) {
+class ClickableWordsRepository(private val skipperPersistence: SkipperPersistence) {
 
     fun clickableWords(): LiveData<List<ClickableWord>> {
-        return ClickableWordsLiveData(sharedPrefs)
+        return ClickableWordsLiveData(skipperPersistence)
     }
 
     fun add(clickableWord: ClickableWord) {
-        sharedPrefs.add(clickableWord)
+        skipperPersistence.add(clickableWord)
     }
 
     fun delete(clickableWord: ClickableWord) {
-        sharedPrefs.delete(clickableWord)
+        skipperPersistence.delete(clickableWord)
     }
 
-    class ClickableWordsLiveData(private val sharedPrefs: SkipperSharedPrefs) : MutableLiveData<List<ClickableWord>>() {
+    class ClickableWordsLiveData(private val skipperPersistence: SkipperPersistence) : MutableLiveData<List<ClickableWord>>() {
 
         override fun onActive() {
             super.onActive()
-            value = sharedPrefs.clickableWords()
-            sharedPrefs.addOnChangeListener(callback)
+            value = skipperPersistence.clickableWords()
+            skipperPersistence.addOnChangeListener(callback)
         }
 
         override fun onInactive() {
-            sharedPrefs.removeChangeListener(callback)
+            skipperPersistence.removeChangeListener(callback)
             super.onInactive()
         }
 
-        private val callback = object : SkipperSharedPrefs.Callback {
+        private val callback = object : SkipperPersistence.Callback {
             override fun onChange(clickableWords: List<ClickableWord>) {
                 value = clickableWords
             }

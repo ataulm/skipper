@@ -1,61 +1,67 @@
 package com.ataulm.skipper.service
 
 import android.accessibilityservice.AccessibilityService
+import android.arch.lifecycle.LiveData
+import android.arch.lifecycle.Observer
 import android.view.accessibility.AccessibilityEvent
 import android.view.accessibility.AccessibilityNodeInfo
-import com.ataulm.skipper.ClickableWord
-import com.ataulm.skipper.SkipperSharedPrefs
+import com.ataulm.skipper.AppPackageName
+import com.ataulm.skipper.SharedPreferencesSkipperPersistence
 
 class SkipperAccessibilityService : AccessibilityService() {
 
-    // TODO: SkipperRepository, rather than direct access to sharedPrefs
-    private lateinit var skipperSharedPrefs: SkipperSharedPrefs
-    private var clickableWords = emptyList<ClickableWord>()
+    private lateinit var liveData: LiveData<ClickableWords>
+
+    private var clickableWords = ClickableWords(emptyMap())
 
     override fun onCreate() {
         super.onCreate()
-        skipperSharedPrefs = SkipperSharedPrefs.create(this)
-        skipperSharedPrefs.addOnChangeListener(callback)
-        clickableWords = skipperSharedPrefs.clickableWords()
+        liveData = SkipperRepository(SharedPreferencesSkipperPersistence.create(this)).clickableWords()
+        liveData.observeForever(observer)
     }
 
     override fun onDestroy() {
-        skipperSharedPrefs.removeChangeListener(callback)
+        liveData.removeObserver(observer)
         super.onDestroy()
     }
 
-    private val callback = object : SkipperSharedPrefs.Callback {
-
-        override fun onChange(clickableWords: List<ClickableWord>) {
-            this@SkipperAccessibilityService.clickableWords = clickableWords
+    private val observer = Observer<ClickableWords> { clickableWords ->
+        if (clickableWords == null) {
+            return@Observer
         }
+        this@SkipperAccessibilityService.clickableWords = clickableWords
     }
 
     override fun onInterrupt() {
         // no op - this has no feedback so there'll be nothing to interrupt
     }
 
-    override fun onAccessibilityEvent(event: AccessibilityEvent?) {
-        clickableWords.forEach({ clickWordIfPresent(event, it.word) })
-    }
-
-    private fun clickWordIfPresent(event: AccessibilityEvent?, clickableWord: String) {
-        val list = event?.source?.findAccessibilityNodeInfosByText(clickableWord).orEmpty()
-        if (list.isNotEmpty()) {
-            val info = list.first()
-            info.clickClosestAncestor()
+    override fun onAccessibilityEvent(event: AccessibilityEvent) {
+        val wordsForApp = clickableWords.clickableWordsFor(AppPackageName(event.packageName.toString()))
+        wordsForApp.forEach { word ->
+            val nodesWithTextMatchingWord = event.source?.findAccessibilityNodeInfosByText(word).orEmpty()
+            nodesWithTextMatchingWord.forEach { node ->
+                // we want at most one successful click from any of the nodes, matching any of the words
+                if (node.clickClosestAncestor()) {
+                    return
+                }
+            }
         }
     }
 
-    private fun AccessibilityNodeInfo?.clickClosestAncestor() {
+    /**
+     * @return true if something was clicked
+     */
+    private fun AccessibilityNodeInfo?.clickClosestAncestor(): Boolean {
         if (this == null) {
-            return
+            return false
         }
 
         if (hasClickAction()) {
             performAction(AccessibilityNodeInfo.ACTION_CLICK)
+            return true
         } else {
-            parent.clickClosestAncestor()
+            return parent.clickClosestAncestor()
         }
     }
 

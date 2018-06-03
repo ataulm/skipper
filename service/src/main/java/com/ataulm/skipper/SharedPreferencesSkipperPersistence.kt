@@ -3,41 +3,41 @@ package com.ataulm.skipper
 import android.content.Context
 import android.content.SharedPreferences
 
-class SkipperSharedPrefs private constructor(private val sharedPrefs: SharedPreferences) {
+class SharedPreferencesSkipperPersistence private constructor(private val sharedPrefs: SharedPreferences) : SkipperPersistence {
 
     companion object {
 
         private const val FILE = "clickable_words"
         private const val KEY_CLICKABLE_WORDS_LIST = "clickable_words_list"
 
-        fun create(context: Context): SkipperSharedPrefs {
+        fun create(context: Context): SharedPreferencesSkipperPersistence {
             val sharedPrefs = context.getSharedPreferences(FILE, Context.MODE_PRIVATE)
-            return SkipperSharedPrefs(sharedPrefs)
+            return SharedPreferencesSkipperPersistence(sharedPrefs)
         }
     }
 
-    private val callbacks = mutableSetOf<Callback>()
+    private val callbacks = mutableSetOf<SkipperPersistence.Callback>()
 
-    fun appsAssociatedWith(clickableWord: ClickableWord): List<AppPackageName> {
+    override fun appsAssociatedWith(clickableWord: ClickableWord): List<AppPackageName> {
         return sharedPrefs.getStringSet(clickableWord.word, emptySet()).toList().map { AppPackageName(it) }
     }
 
-    fun updateAppsAssociatedWithWord(clickableWord: ClickableWord, packageNames: Set<AppPackageName>) {
+    override fun updateAppsAssociatedWithWord(clickableWord: ClickableWord, packageNames: Set<AppPackageName>) {
         val packageNamesStringSet = packageNames.map { it.packageName }.toSet()
         sharedPrefs.edit().putStringSet(clickableWord.word, packageNamesStringSet).apply()
     }
 
-    fun clickableWords(): List<ClickableWord> {
+    override fun clickableWords(): List<ClickableWord> {
         return immutableWords().toList().map { ClickableWord(it) }
     }
 
-    fun add(clickableWord: ClickableWord) {
+    override fun add(clickableWord: ClickableWord) {
         val list = immutableWords().toMutableList()
         list.add(clickableWord.word)
         persistClickableWords(list)
     }
 
-    fun delete(clickableWord: ClickableWord) {
+    override fun delete(clickableWord: ClickableWord) {
         val list = immutableWords().toMutableList()
         list.remove(clickableWord.word)
         persistClickableWords(list)
@@ -55,14 +55,14 @@ class SkipperSharedPrefs private constructor(private val sharedPrefs: SharedPref
         sharedPrefs.edit().putStringSet(KEY_CLICKABLE_WORDS_LIST, list.toSet()).apply()
     }
 
-    fun addOnChangeListener(callback: Callback) {
+    override fun addOnChangeListener(callback: SkipperPersistence.Callback) {
         callbacks.add(callback)
         if (callbacks.size == 1) {
             sharedPrefs.registerOnSharedPreferenceChangeListener(clickableWordsChangedListener)
         }
     }
 
-    fun removeChangeListener(callback: Callback) {
+    override fun removeChangeListener(callback: SkipperPersistence.Callback) {
         callbacks.remove(callback)
         if (callbacks.isEmpty()) {
             sharedPrefs.unregisterOnSharedPreferenceChangeListener(clickableWordsChangedListener)
@@ -76,10 +76,5 @@ class SkipperSharedPrefs private constructor(private val sharedPrefs: SharedPref
                 it.onChange(clickableWords)
             })
         }
-    }
-
-    interface Callback {
-
-        fun onChange(clickableWords: List<ClickableWord>)
     }
 }

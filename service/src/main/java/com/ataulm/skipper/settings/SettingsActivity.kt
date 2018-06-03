@@ -6,7 +6,7 @@ import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
 import com.ataulm.skipper.ClickableWord
-import com.ataulm.skipper.SkipperSharedPrefs
+import com.ataulm.skipper.SharedPreferencesSkipperPersistence
 import com.example.R
 import kotlinx.android.synthetic.main.activity_settings.*
 
@@ -16,7 +16,7 @@ class SettingsActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_settings)
 
-        val repository = ClickableWordsRepository(SkipperSharedPrefs.create(this))
+        val repository = ClickableWordsRepository(SharedPreferencesSkipperPersistence.create(this))
         clickableWordsRecyclerView.layoutManager = LinearLayoutManager(this)
         clickableWordsRecyclerView.adapter = ClickableWordsAdapter(object : ClickableWordsAdapter.Callback {
 

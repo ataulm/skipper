@@ -1,34 +1,35 @@
 ext {
     versions = [
-            androidSdk: [
+            androidSdk          : [
                     buildTools: '27.0.3',
                     compile   : 27,
                     min       : 21,
                     target    : 27
             ],
             androidArchLifecycle: '1.1.1',
-            kotlin    : '1.2.31',
-            support   : '27.1.0'
+            kotlin              : '1.2.31',
+            support             : '27.1.0'
     ]
 
     libraries = [
-            build              : [
+            build                         : [
                     androidGradle: 'com.android.tools.build:gradle:3.0.1',
                     kotlinGradle : "org.jetbrains.kotlin:kotlin-gradle-plugin:${versions.kotlin}"
             ],
             androidArchLifecycleExtensions: "android.arch.lifecycle:extensions:${versions.androidArchLifecycle}",
             androidArchLifecycleCompiler  : "android.arch.lifecycle:compiler:${versions.androidArchLifecycle}",
-            androidTestRules   : 'com.android.support.test:rules:0.5',
-            androidTestRunner  : 'com.android.support.test:runner:0.5',
-            espressoCore       : 'com.android.support.test.espresso:espresso-core:2.2.2',
-            googleTruth        : 'com.google.truth:truth:0.39',
-            jUnit              : 'junit:junit:4.12',
-            jsr305             : 'com.google.code.findbugs:jsr305:2.0.1',
-            kotlinStdLib       : "org.jetbrains.kotlin:kotlin-stdlib:${versions.kotlin}",
-            mockitoCore        : 'org.mockito:mockito-core:1.10.19',
-            supportAppCompatV7 : "com.android.support:appcompat-v7:${versions.support}",
-            supportDesign      : "com.android.support:design:${versions.support}",
-            supportRecyclerView: "com.android.support:recyclerview-v7:${versions.support}",
-            supportV13         : "com.android.support:support-v13:${versions.support}"
+            androidArchTesting            : "android.arch.core:core-testing:${versions.androidArchLifecycle}",
+            androidTestRules              : 'com.android.support.test:rules:0.5',
+            androidTestRunner             : 'com.android.support.test:runner:0.5',
+            espressoCore                  : 'com.android.support.test.espresso:espresso-core:2.2.2',
+            googleTruth                   : 'com.google.truth:truth:0.39',
+            jUnit                         : 'junit:junit:4.12',
+            jsr305                        : 'com.google.code.findbugs:jsr305:2.0.1',
+            kotlinStdLib                  : "org.jetbrains.kotlin:kotlin-stdlib:${versions.kotlin}",
+            mockitoCore                   : 'org.mockito:mockito-core:1.10.19',
+            supportAppCompatV7            : "com.android.support:appcompat-v7:${versions.support}",
+            supportDesign                 : "com.android.support:design:${versions.support}",
+            supportRecyclerView           : "com.android.support:recyclerview-v7:${versions.support}",
+            supportV13                    : "com.android.support:support-v13:${versions.support}"
     ]
 }

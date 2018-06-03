@@ -1,4 +1,4 @@
-package com.ataulm.skipper.settings
+package com.ataulm.skipper
 
 import android.content.Intent
 import android.content.pm.PackageManager
