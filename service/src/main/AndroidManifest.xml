@@ -10,7 +10,9 @@
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
 
-        <activity android:name="com.ataulm.skipper.settings.SettingsActivity" />
+        <activity
+            android:name="com.ataulm.skipper.settings.SettingsActivity"
+            android:label="@string/settings_title" />
         <activity android:name="com.ataulm.skipper.settings.ConfigureEntriesActivity" />
 
         <activity-alias
