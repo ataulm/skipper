@@ -1,5 +1,5 @@
 <resources>
   <string name="app_name">Skipper</string>
   <string name="button_save">Save</string>
-  <string name="delete">Delete</string>
+  <string name="content_desc_delete">Delete</string>
 </resources>
