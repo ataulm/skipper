@@ -2,6 +2,7 @@ package com.ataulm.skipper.settings
 
 import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.MediatorLiveData
+import com.ataulm.skipper.App
 import com.ataulm.skipper.AppPackageName
 import com.ataulm.skipper.ClickableWord
 import java.util.*
@@ -14,13 +15,17 @@ class ConfigureEntriesViewModel(private val clickableWord: ClickableWord, privat
         val mediatorLiveData = MediatorLiveData<List<WordToAppAssociation>>()
         mediatorLiveData.addSource(repository.apps(), { apps ->
             mediatorLiveData.addSource(repository.appsAssociatedWith(clickableWord), { packages ->
-                mediatorLiveData.value = apps!!
-                        .sortedBy { app -> app.name.toLowerCase(Locale.US) }
-                        .map { WordToAppAssociation(it, packages!!.contains(it.packageName)) }
-                        .sortedByDescending { wordToAppAssociation -> wordToAppAssociation.associatedToWord }
+                mediatorLiveData.value = combine(apps!!, packages!!)
             })
         })
         return mediatorLiveData
+    }
+
+    private fun combine(apps: List<App>, packages: List<AppPackageName>): List<WordToAppAssociation> {
+        return apps
+                .sortedBy { app -> app.name.toLowerCase(Locale.US) }
+                .map { WordToAppAssociation(it, packages.contains(it.packageName)) }
+                .sortedByDescending { wordToAppAssociation -> wordToAppAssociation.associatedToWord }
     }
 
     fun onChangePackageCheckState(packageName: AppPackageName, checked: Boolean) {
