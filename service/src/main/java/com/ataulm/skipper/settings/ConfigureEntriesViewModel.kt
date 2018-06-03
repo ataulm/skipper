@@ -13,7 +13,10 @@ class ConfigureEntriesViewModel(private val clickableWord: ClickableWord, privat
         val mediatorLiveData = MediatorLiveData<List<WordToAppAssociation>>()
         mediatorLiveData.addSource(repository.apps(), { apps ->
             mediatorLiveData.addSource(repository.appsAssociatedWith(clickableWord), { packages ->
-                mediatorLiveData.value = apps!!.map { WordToAppAssociation(it, packages!!.contains(it.packageName)) }
+                mediatorLiveData.value = apps!!
+                        .sortedBy { app -> app.name }
+                        .map { WordToAppAssociation(it, packages!!.contains(it.packageName)) }
+                        .sortedByDescending { wordToAppAssociation -> wordToAppAssociation.associatedToWord }
             })
         })
         return mediatorLiveData

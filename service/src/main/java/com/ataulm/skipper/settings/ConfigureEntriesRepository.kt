@@ -26,7 +26,7 @@ class ConfigureEntriesRepository(private val installedAppsService: InstalledApps
         override fun onActive() {
             super.onActive()
             Thread({
-                postValue(installedAppsService.getApps().sortedBy {app -> return@sortedBy app.name })
+                postValue(installedAppsService.getApps())
             }).start()
         }
     }
