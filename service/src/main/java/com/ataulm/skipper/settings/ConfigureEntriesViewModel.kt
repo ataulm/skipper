@@ -4,6 +4,7 @@ import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.MediatorLiveData
 import com.ataulm.skipper.AppPackageName
 import com.ataulm.skipper.ClickableWord
+import java.util.*
 
 class ConfigureEntriesViewModel(private val clickableWord: ClickableWord, private val repository: ConfigureEntriesRepository) {
 
@@ -14,7 +15,7 @@ class ConfigureEntriesViewModel(private val clickableWord: ClickableWord, privat
         mediatorLiveData.addSource(repository.apps(), { apps ->
             mediatorLiveData.addSource(repository.appsAssociatedWith(clickableWord), { packages ->
                 mediatorLiveData.value = apps!!
-                        .sortedBy { app -> app.name }
+                        .sortedBy { app -> app.name.toLowerCase(Locale.US) }
                         .map { WordToAppAssociation(it, packages!!.contains(it.packageName)) }
                         .sortedByDescending { wordToAppAssociation -> wordToAppAssociation.associatedToWord }
             })
