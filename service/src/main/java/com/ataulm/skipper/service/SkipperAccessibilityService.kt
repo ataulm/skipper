@@ -10,13 +10,13 @@ import com.ataulm.skipper.SharedPreferencesSkipperPersistence
 
 class SkipperAccessibilityService : AccessibilityService() {
 
-    private lateinit var liveData: LiveData<ClickableWords>
+    private lateinit var liveData: LiveData<AppsToWordsMap>
 
-    private var clickableWords = ClickableWords(emptyMap())
+    private var appsToWordsMap: AppsToWordsMap = emptyMap()
 
     override fun onCreate() {
         super.onCreate()
-        liveData = SkipperRepository(SharedPreferencesSkipperPersistence.create(this)).clickableWords()
+        liveData = SkipperRepository(SharedPreferencesSkipperPersistence.create(this)).appsToWordsMap()
         liveData.observeForever(observer)
     }
 
@@ -25,11 +25,11 @@ class SkipperAccessibilityService : AccessibilityService() {
         super.onDestroy()
     }
 
-    private val observer = Observer<ClickableWords> { clickableWords ->
-        if (clickableWords == null) {
+    private val observer = Observer<AppsToWordsMap> { appsToWordsMap ->
+        if (appsToWordsMap == null) {
             return@Observer
         }
-        this@SkipperAccessibilityService.clickableWords = clickableWords
+        this@SkipperAccessibilityService.appsToWordsMap = appsToWordsMap
     }
 
     override fun onInterrupt() {
@@ -37,10 +37,10 @@ class SkipperAccessibilityService : AccessibilityService() {
     }
 
     override fun onAccessibilityEvent(event: AccessibilityEvent) {
-        val wordsForApp = clickableWords.clickableWordsFor(AppPackageName(event.packageName.toString()))
-        wordsForApp.forEach { word ->
-            val nodesWithTextMatchingWord = event.source?.findAccessibilityNodeInfosByText(word).orEmpty()
-            nodesWithTextMatchingWord.forEach { node ->
+        val clickableWords = appsToWordsMap[AppPackageName(event.packageName.toString())].orEmpty()
+        clickableWords.forEach {
+            val matchingNodes = event.source?.findAccessibilityNodeInfosByText(it.word).orEmpty()
+            matchingNodes.forEach { node ->
                 // we want at most one successful click from any of the nodes, matching any of the words
                 if (node.clickClosestAncestor()) {
                     return
