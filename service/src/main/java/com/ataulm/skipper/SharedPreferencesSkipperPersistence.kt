@@ -9,6 +9,7 @@ class SharedPreferencesSkipperPersistence private constructor(private val shared
 
         private const val FILE = "clickable_words"
         private const val KEY_CLICKABLE_WORDS_LIST = "clickable_words_list"
+        private const val KEY_TARGETED_APPS_LIST = "targeted_apps_list"
 
         fun create(context: Context): SharedPreferencesSkipperPersistence {
             val sharedPrefs = context.getSharedPreferences(FILE, Context.MODE_PRIVATE)
@@ -55,9 +56,44 @@ class SharedPreferencesSkipperPersistence private constructor(private val shared
         sharedPrefs.edit().putStringSet(KEY_CLICKABLE_WORDS_LIST, list.toSet()).apply()
     }
 
+    override fun targetedApps(): List<AppPackageName> {
+        return targetedAppsImmutable().map { AppPackageName(it) }
+    }
+
+    override fun clickableWords(app: AppPackageName): List<ClickableWord> {
+        return sharedPrefs.getStringSet(app.packageName, emptySet()).map { ClickableWord(it) }
+    }
+
+    override fun persistAssociations(app: AppPackageName, vararg words: ClickableWord) {
+        if (words.isEmpty()) {
+            removeTargetedApp(app)
+        } else {
+            updateWordAssociationsForTargetedApp(app, words)
+        }
+    }
+
+    private fun removeTargetedApp(app: AppPackageName) {
+        val targetedApps = targetedAppsImmutable().toMutableSet()
+        targetedApps.remove(app.packageName)
+        sharedPrefs.edit()
+                .remove(app.packageName) // remove associated words for this app
+                .putStringSet(KEY_TARGETED_APPS_LIST, targetedApps)
+                .apply()
+    }
+
+    private fun updateWordAssociationsForTargetedApp(app: AppPackageName, words: Array<out ClickableWord>) {
+        val targetedApps = targetedAppsImmutable().toMutableSet()
+        targetedApps.add(app.packageName)
+        sharedPrefs.edit()
+                .putStringSet(KEY_TARGETED_APPS_LIST, targetedApps)
+                .putStringSet(app.packageName, words.map { it.word }.toSet())
+                .apply()
+    }
+
     override fun addOnChangeListener(callback: SkipperPersistence.Callback) {
         callbacks.add(callback)
         if (callbacks.size == 1) {
+            sharedPrefs.registerOnSharedPreferenceChangeListener(targetedAppsChangedCallback)
             sharedPrefs.registerOnSharedPreferenceChangeListener(clickableWordsChangedListener)
         }
     }
@@ -65,6 +101,7 @@ class SharedPreferencesSkipperPersistence private constructor(private val shared
     override fun removeChangeListener(callback: SkipperPersistence.Callback) {
         callbacks.remove(callback)
         if (callbacks.isEmpty()) {
+            sharedPrefs.unregisterOnSharedPreferenceChangeListener(targetedAppsChangedCallback)
             sharedPrefs.unregisterOnSharedPreferenceChangeListener(clickableWordsChangedListener)
         }
     }
@@ -77,4 +114,10 @@ class SharedPreferencesSkipperPersistence private constructor(private val shared
             })
         }
     }
+
+    private val targetedAppsChangedCallback = SharedPreferences.OnSharedPreferenceChangeListener { _, _ ->
+        callbacks.forEach({ it.onDataChanged() })
+    }
+
+    private fun targetedAppsImmutable() = sharedPrefs.getStringSet(KEY_TARGETED_APPS_LIST, emptySet())
 }

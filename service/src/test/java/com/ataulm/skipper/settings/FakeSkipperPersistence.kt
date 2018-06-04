@@ -6,8 +6,23 @@ import com.ataulm.skipper.SkipperPersistence
 
 class FakeSkipperPersistence(
         private val clickableWords: MutableList<ClickableWord> = emptyList<ClickableWord>().toMutableList(),
-        private val appAssociations: MutableMap<ClickableWord, MutableList<AppPackageName>> = emptyMap<ClickableWord, MutableList<AppPackageName>>().toMutableMap()
+        private val appAssociations: MutableMap<ClickableWord, MutableList<AppPackageName>> = emptyMap<ClickableWord, MutableList<AppPackageName>>().toMutableMap(),
+        private val targetedApps: MutableList<AppPackageName> = emptyList<AppPackageName>().toMutableList(),
+        private val appToWordsMap: MutableMap<AppPackageName, MutableList<ClickableWord>> = emptyMap<AppPackageName, MutableList<ClickableWord>>().toMutableMap()
 ) : SkipperPersistence {
+
+    override fun targetedApps(): List<AppPackageName> {
+        return targetedApps
+    }
+
+    override fun clickableWords(app: AppPackageName): List<ClickableWord> {
+        return appToWordsMap.getOrDefault(app, emptyList<ClickableWord>().toMutableList())
+    }
+
+    override fun persistAssociations(app: AppPackageName, vararg words: ClickableWord) {
+        appToWordsMap.put(app, words.toMutableList())
+        callbacks.forEach { it.onDataChanged() }
+    }
 
     private val callbacks = mutableListOf<SkipperPersistence.Callback>()
 

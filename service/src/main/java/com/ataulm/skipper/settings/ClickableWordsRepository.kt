@@ -33,6 +33,11 @@ class ClickableWordsRepository(private val skipperPersistence: SkipperPersistenc
         }
 
         private val callback = object : SkipperPersistence.Callback {
+
+            override fun onDataChanged() {
+                value = skipperPersistence.clickableWords()
+            }
+
             override fun onChange(clickableWords: List<ClickableWord>) {
                 value = clickableWords
             }
