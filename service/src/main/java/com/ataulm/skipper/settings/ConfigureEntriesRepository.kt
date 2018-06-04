@@ -4,7 +4,7 @@ import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.MutableLiveData
 import com.ataulm.skipper.*
 
-class ConfigureEntriesRepository(private val installedAppsService: InstalledAppsService, private val skipperPersistence: SharedPreferencesSkipperPersistence) {
+class ConfigureEntriesRepository(private val installedAppsService: InstalledAppsService, private val skipperPersistence: SkipperPersistence) {
 
     fun apps(): LiveData<List<App>> {
         return AppsLiveData(installedAppsService)
@@ -28,7 +28,7 @@ class ConfigureEntriesRepository(private val installedAppsService: InstalledApps
         }
     }
 
-    private class AssociatedAppsLiveData(private val skipperPersistence: SharedPreferencesSkipperPersistence, private val word: ClickableWord) : MutableLiveData<List<AppPackageName>>() {
+    private class AssociatedAppsLiveData(private val skipperPersistence: SkipperPersistence, private val word: ClickableWord) : MutableLiveData<List<AppPackageName>>() {
 
         override fun onActive() {
             super.onActive()
