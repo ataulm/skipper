@@ -32,9 +32,9 @@ class SharedPreferencesSkipperPersistence private constructor(private val shared
     }
 
     override fun add(clickableWord: ClickableWord) {
-        val list = immutableWords().toMutableList()
-        list.add(clickableWord.word)
-        persistClickableWords(list)
+        val set = immutableWords().toMutableSet()
+        set.add(clickableWord.word)
+        persistClickableWords(set.toList())
     }
 
     override fun delete(clickableWord: ClickableWord) {

@@ -24,8 +24,10 @@ class FakeSkipperPersistence(
     }
 
     override fun add(clickableWord: ClickableWord) {
-        clickableWords.add(clickableWord)
-        callbacks.forEach({ it.onChange(clickableWords) })
+        if (!clickableWords.contains(clickableWord)) {
+            clickableWords.add(clickableWord)
+            callbacks.forEach({ it.onChange(clickableWords) })
+        }
     }
 
     override fun delete(clickableWord: ClickableWord) {
