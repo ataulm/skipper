@@ -3,9 +3,6 @@ package com.ataulm.skipper
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.content.pm.ResolveInfo
-import com.ataulm.skipper.App
-import com.ataulm.skipper.AppPackageName
-import com.example.BuildConfig
 
 class InstalledAppsService(private val packageManager: PackageManager) {
 
@@ -42,11 +39,6 @@ class InstalledAppsService(private val packageManager: PackageManager) {
     }
 
     private fun resolvePackageName(resolveInfo: ResolveInfo): String {
-        val packageName: String? = resolveInfo.activityInfo.packageName
-        return if (packageName == null) {
-            resolveInfo.resolvePackageName
-        } else {
-            packageName
-        }
+        return resolveInfo.activityInfo.packageName ?: resolveInfo.resolvePackageName
     }
 }

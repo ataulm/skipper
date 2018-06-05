@@ -1,6 +1,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="com.example">
+    package="com.ataulm.skipper">
 
     <application
         android:allowBackup="true"
@@ -11,13 +11,13 @@
         tools:ignore="GoogleAppIndexingWarning">
 
         <activity
-            android:name="com.ataulm.skipper.settings.SettingsActivity"
+            android:name=".ConfiguredAppsActivity"
             android:label="@string/settings_title" />
-        <activity android:name="com.ataulm.skipper.settings.ConfigureEntriesActivity" />
+        <activity android:name=".EditAppAssociationsActivity" />
 
         <activity-alias
             android:name="activity.primary_launcher"
-            android:targetActivity="com.ataulm.skipper.settings.SettingsActivity">
+            android:targetActivity=".ConfiguredAppsActivity">
 
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -27,7 +27,7 @@
         </activity-alias>
 
         <service
-            android:name="com.ataulm.skipper.service.SkipperAccessibilityService"
+            android:name="com.ataulm.skipper.SkipperAccessibilityService"
             android:label="@string/app_name"
             android:permission="android.permission.BIND_ACCESSIBILITY_SERVICE">
 

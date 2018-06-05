@@ -15,10 +15,24 @@
         android:paddingTop="12dp"
         app:layoutManager="android.support.v7.widget.LinearLayoutManager" />
 
-    <Button
-        android:id="@+id/configureEntriesSaveButton"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/button_save" />
+        android:orientation="horizontal">
+
+        <EditText
+            android:id="@+id/configureEntriesEditText"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:inputType="text" />
+
+        <Button
+            android:id="@+id/configureEntriesAddWordButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/button_add" />
+
+    </LinearLayout>
 
 </LinearLayout>

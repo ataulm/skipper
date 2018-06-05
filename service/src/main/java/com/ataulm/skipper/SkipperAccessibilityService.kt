@@ -1,12 +1,10 @@
-package com.ataulm.skipper.service
+package com.ataulm.skipper
 
 import android.accessibilityservice.AccessibilityService
 import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.Observer
 import android.view.accessibility.AccessibilityEvent
 import android.view.accessibility.AccessibilityNodeInfo
-import com.ataulm.skipper.AppPackageName
-import com.ataulm.skipper.SharedPreferencesSkipperPersistence
 
 class SkipperAccessibilityService : AccessibilityService() {
 
@@ -16,7 +14,7 @@ class SkipperAccessibilityService : AccessibilityService() {
 
     override fun onCreate() {
         super.onCreate()
-        liveData = SkipperRepository(SharedPreferencesSkipperPersistence.create(this)).appsToWordsMap()
+        liveData = SkipperRepository(InstalledAppsService(packageManager), SharedPreferencesSkipperPersistence.create(this)).appsToWordsMap()
         liveData.observeForever(observer)
     }
 
