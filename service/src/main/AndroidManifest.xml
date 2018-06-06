@@ -11,13 +11,13 @@
         tools:ignore="GoogleAppIndexingWarning">
 
         <activity
-            android:name=".ConfiguredAppsActivity"
+            android:name=".settings.SkipperSettingsActivity"
             android:label="@string/settings_title" />
         <activity android:name=".EditAppAssociationsActivity" />
 
         <activity-alias
             android:name="activity.primary_launcher"
-            android:targetActivity=".ConfiguredAppsActivity">
+            android:targetActivity=".settings.SkipperSettingsActivity">
 
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -37,7 +37,7 @@
 
             <meta-data
                 android:name="android.accessibilityservice"
-                android:resource="@xml/continue_watching_config" />
+                android:resource="@xml/skipper_config" />
         </service>
     </application>
 

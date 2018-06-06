@@ -1,4 +1,4 @@
-package com.ataulm.skipper
+package com.ataulm.skipper.settings
 
 import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.MediatorLiveData
@@ -8,10 +8,11 @@ import android.arch.lifecycle.ViewModel
 import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
+import com.ataulm.skipper.*
 import kotlinx.android.synthetic.main.activity_configure_apps.*
 import java.util.*
 
-class ConfiguredAppsActivity : AppCompatActivity() {
+class SkipperSettingsActivity : AppCompatActivity() {
 
     private lateinit var viewModel: ConfigureAppsViewModel
 
@@ -36,7 +37,7 @@ class ConfiguredAppsActivity : AppCompatActivity() {
             }
 
             viewModel.onEventConsumed(it)
-            val intent = Intent(this@ConfiguredAppsActivity, EditAppAssociationsActivity::class.java)
+            val intent = Intent(this@SkipperSettingsActivity, EditAppAssociationsActivity::class.java)
                     .putExtra(EditAppAssociationsActivity.EXTRA_PACKAGE_NAME, it.app.packageName)
             startActivity(intent)
         })

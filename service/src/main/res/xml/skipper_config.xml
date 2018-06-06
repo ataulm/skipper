@@ -5,4 +5,4 @@
     android:accessibilityFlags="flagIncludeNotImportantViews|flagRetrieveInteractiveWindows"
     android:canRetrieveWindowContent="true"
     android:notificationTimeout="500"
-    android:settingsActivity=".SettingsActivity" />
+    android:settingsActivity=".settings.SkipperSettingsActivity" />

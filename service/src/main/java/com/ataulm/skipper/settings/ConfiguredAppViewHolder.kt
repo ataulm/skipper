@@ -1,9 +1,11 @@
-package com.ataulm.skipper
+package com.ataulm.skipper.settings
 
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.ataulm.skipper.ConfiguredApp
+import com.ataulm.skipper.R
 import kotlinx.android.synthetic.main.item_configured_app.view.*
 
 class ConfiguredAppViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {

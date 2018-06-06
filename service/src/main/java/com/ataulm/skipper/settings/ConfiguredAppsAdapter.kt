@@ -1,7 +1,8 @@
-package com.ataulm.skipper
+package com.ataulm.skipper.settings
 
 import android.support.v7.widget.RecyclerView
 import android.view.ViewGroup
+import com.ataulm.skipper.ConfiguredApp
 
 class ConfiguredAppsAdapter(private val callback: Callback) : RecyclerView.Adapter<ConfiguredAppViewHolder>() {
 
