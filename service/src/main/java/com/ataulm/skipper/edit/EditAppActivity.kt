@@ -26,38 +26,40 @@ class EditAppActivity : AppCompatActivity() {
         val repository = SkipperRepository(InstalledAppsService(packageManager), injectPersistence())
         viewModel = EditAppViewModel(appPackageName, repository)
 
-        configureEntriesPackagesRecyclerView.adapter = ClickableWordsAdapter(object : ClickableWordsAdapter.Callback {
+        wordsRecyclerView.adapter = ClickableWordsAdapter(object : ClickableWordsAdapter.Callback {
 
             override fun onClickDelete(word: ClickableWord) {
                 viewModel.onClickDelete(word)
             }
         })
 
-        configureEntriesAddWordButton.setOnClickListener {
-            val text = configureEntriesEditText.text
+        addWordButton.setOnClickListener {
+            val text = wordEditText.text
             if (text.isNotBlank()) {
                 viewModel.onClickAdd(ClickableWord(text.toString()))
-                configureEntriesEditText.text = null
+                wordEditText.text = null
             }
         }
 
-        viewModel.events().observe(this, EventObserver {
-            finish()
-        })
+        viewModel.events().observe(this, EventObserver(handleEvent()))
+        viewModel.data().observe(this, DataObserver<List<ClickableWord>> { wordsRecyclerView.updateApps(it) })
     }
 
-    override fun onResume() {
-        super.onResume()
-        viewModel.data().observe(this, DataObserver<List<ClickableWord>> {
-            configureEntriesPackagesRecyclerView.updateApps(it)
-        })
+    private fun handleEvent(): (EditScreenEvent) -> Unit {
+        return {
+            when (it) {
+                is EditScreenEvent.DismissEditScreen -> {
+                    finish()
+                }
+            }
+        }
     }
 
     override fun onBackPressed() {
         viewModel.onClickDismiss()
     }
+}
 
-    private fun RecyclerView.updateApps(list: List<ClickableWord>) {
-        (adapter as ClickableWordsAdapter).update(list)
-    }
+private fun RecyclerView.updateApps(list: List<ClickableWord>) {
+    (adapter as ClickableWordsAdapter).update(list)
 }

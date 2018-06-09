@@ -6,7 +6,7 @@
     android:orientation="vertical">
 
     <android.support.v7.widget.RecyclerView
-        android:id="@+id/configureEntriesPackagesRecyclerView"
+        android:id="@+id/wordsRecyclerView"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
@@ -21,14 +21,14 @@
         android:orientation="horizontal">
 
         <EditText
-            android:id="@+id/configureEntriesEditText"
+            android:id="@+id/wordEditText"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:inputType="text" />
 
         <Button
-            android:id="@+id/configureEntriesAddWordButton"
+            android:id="@+id/addWordButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/button_add" />

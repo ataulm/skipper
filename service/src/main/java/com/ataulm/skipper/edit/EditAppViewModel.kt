@@ -31,8 +31,4 @@ class EditAppViewModel(private val appPackageName: AppPackageName, private val r
         eventsLiveData.postValue(Event(EditScreenEvent.DismissEditScreen()))
     }
 
-    sealed class EditScreenEvent {
-
-        class DismissEditScreen : EditScreenEvent()
-    }
 }
