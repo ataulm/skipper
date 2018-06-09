@@ -2,9 +2,9 @@ package com.ataulm.skipper
 
 import android.accessibilityservice.AccessibilityService
 import android.arch.lifecycle.LiveData
-import android.arch.lifecycle.Observer
 import android.view.accessibility.AccessibilityEvent
 import android.view.accessibility.AccessibilityNodeInfo
+import com.ataulm.skipper.observer.DataObserver
 
 class SkipperAccessibilityService : AccessibilityService() {
 
@@ -23,11 +23,8 @@ class SkipperAccessibilityService : AccessibilityService() {
         super.onDestroy()
     }
 
-    private val observer = Observer<AppsToWordsMap> { appsToWordsMap ->
-        if (appsToWordsMap == null) {
-            return@Observer
-        }
-        this@SkipperAccessibilityService.appsToWordsMap = appsToWordsMap
+    private val observer = DataObserver<AppsToWordsMap> {
+        this@SkipperAccessibilityService.appsToWordsMap = it
     }
 
     override fun onInterrupt() {
