@@ -1,8 +1,13 @@
-package com.ataulm.skipper
+package com.ataulm.skipper.edit
 
 import android.arch.lifecycle.Observer
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
+import android.support.v7.widget.RecyclerView
+import com.ataulm.skipper.*
+import com.ataulm.skipper.observer.DataObserver
+import com.ataulm.skipper.settings.AppWordAssociations
+import com.ataulm.skipper.settings.AppsAdapter
 import kotlinx.android.synthetic.main.activity_edit_app_associations.*
 
 class EditAppAssociationsActivity : AppCompatActivity() {
@@ -41,11 +46,8 @@ class EditAppAssociationsActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
-        viewModel.clickableWords().observe(this, Observer<List<ClickableWord>> { list ->
-            if (list == null) {
-                return@Observer
-            }
-            (configureEntriesPackagesRecyclerView.adapter as ClickableWordsAdapter).update(list)
+        viewModel.clickableWords().observe(this, DataObserver<List<ClickableWord>> {
+            configureEntriesPackagesRecyclerView.updateApps(it)
         })
     }
 
@@ -53,5 +55,9 @@ class EditAppAssociationsActivity : AppCompatActivity() {
         // TODO: don't call super, use nav events
         super.onBackPressed()
         viewModel.onClickDismiss()
+    }
+
+    private fun RecyclerView.updateApps(list: List<ClickableWord>) {
+        (adapter as ClickableWordsAdapter).update(list)
     }
 }

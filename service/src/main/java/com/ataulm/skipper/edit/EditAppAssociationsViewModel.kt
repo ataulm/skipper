@@ -1,6 +1,9 @@
-package com.ataulm.skipper
+package com.ataulm.skipper.edit
 
 import android.arch.lifecycle.LiveData
+import com.ataulm.skipper.AppPackageName
+import com.ataulm.skipper.ClickableWord
+import com.ataulm.skipper.SkipperRepository
 
 class EditAppAssociationsViewModel(private val appPackageName: AppPackageName, private val repository: SkipperRepository) {
 

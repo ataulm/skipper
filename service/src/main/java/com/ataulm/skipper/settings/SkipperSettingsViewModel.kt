@@ -37,13 +37,13 @@ class SkipperSettingsViewModel(private val repository: SkipperRepository) : View
                 .sortedBy { it.associatedWords.isEmpty() }
     }
 
-    fun events(): LiveData<Event<OpenConfigureAppEvent>> {
+    fun events(): LiveData<Event<OpenEditScreenEvent>> {
         return eventsLiveData
     }
 
-    private val eventsLiveData = MutableLiveData<Event<OpenConfigureAppEvent>>()
+    private val eventsLiveData = MutableLiveData<Event<OpenEditScreenEvent>>()
 
     fun onUserClickApp(appWordAssociations: AppWordAssociations) {
-        eventsLiveData.value = Event(OpenConfigureAppEvent(appWordAssociations.app.packageName))
+        eventsLiveData.value = Event(OpenEditScreenEvent(appWordAssociations.app.packageName))
     }
 }
