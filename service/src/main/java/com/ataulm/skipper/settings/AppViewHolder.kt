@@ -18,7 +18,6 @@ class AppViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
     }
 
     fun bind(appWordAssociations: AppWordAssociations, callback: AppsAdapter.Callback) {
-        // TODO: set content description
         itemView.appIconImageView.setImageDrawable(appWordAssociations.app.icon)
         itemView.appNameTextView.text = appWordAssociations.app.name
         itemView.statusImageView.setImageResource(

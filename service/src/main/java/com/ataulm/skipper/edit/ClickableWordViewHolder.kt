@@ -19,8 +19,6 @@ class ClickableWordViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView
     }
 
     fun bind(clickableWord: ClickableWord, callback: ClickableWordsAdapter.Callback) {
-        // TODO: set content description
-        // TODO: bind associated packages
         itemView.clickableWordDeleteButton.setOnClickListener { callback.onClickDelete(clickableWord) }
         itemView.clickableWordTextView.text = clickableWord.word
     }
