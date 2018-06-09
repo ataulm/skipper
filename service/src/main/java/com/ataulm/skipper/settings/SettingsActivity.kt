@@ -7,6 +7,7 @@ import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
 import com.ataulm.skipper.ClickableWord
 import com.ataulm.skipper.SharedPreferencesSkipperPersistence
+import com.ataulm.skipper.observer.DataObserver
 import com.example.R
 import kotlinx.android.synthetic.main.activity_settings.*
 
@@ -39,10 +40,8 @@ class SettingsActivity : AppCompatActivity() {
             }
         })
 
-        repository.clickableWords().observe(this, Observer<List<ClickableWord>> {
-            if (it != null) {
-                (clickableWordsRecyclerView.adapter as ClickableWordsAdapter).update(it)
-            }
+        repository.clickableWords().observe(this, DataObserver<List<ClickableWord>> {
+            (clickableWordsRecyclerView.adapter as ClickableWordsAdapter).update(it)
         })
     }
 }
