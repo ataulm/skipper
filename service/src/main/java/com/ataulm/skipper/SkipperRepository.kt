@@ -40,7 +40,7 @@ class SkipperRepository(private val installedAppsService: InstalledAppsService, 
         override fun onActive() {
             super.onActive()
             value = fetchAppsToWordsMapping()
-            persistence.addOnChangeListener(callback) // TODO: this isn't working correctly all the time :S
+            persistence.addOnChangeListener(callback)
         }
 
         private fun fetchAppsToWordsMapping(): MutableMap<AppPackageName, List<ClickableWord>> {

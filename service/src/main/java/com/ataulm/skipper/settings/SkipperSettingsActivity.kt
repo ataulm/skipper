@@ -20,12 +20,12 @@ class SkipperSettingsActivity : AppCompatActivity() {
 
         appsRecyclerView.adapter = AppsAdapter(object : AppsAdapter.Callback {
             override fun onClick(appWordAssociations: AppWordAssociations) {
-                viewModel.onClick(appWordAssociations)
+                viewModel.onUserClickApp(appWordAssociations)
             }
         })
 
         viewModel.events().observe(this, EventObserver { handle(it) })
-        viewModel.configuredApps().observe(this, DataObserver { appsRecyclerView.updateApps(it) })
+        viewModel.apps().observe(this, DataObserver { appsRecyclerView.updateApps(it) })
     }
 
     private fun handle(event: OpenConfigureAppEvent) {
