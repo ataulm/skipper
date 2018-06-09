@@ -20,7 +20,7 @@ class EditAppAssociationsActivity : AppCompatActivity() {
 
         val appPackageName = AppPackageName(intent.getStringExtra(EXTRA_PACKAGE_NAME)) // TODO: should fetch App to get app title
         title = "Edit app \"${appPackageName.packageName}\"" // TODO: string resources
-        val repository = SkipperRepository(InstalledAppsService(packageManager), SharedPreferencesSkipperPersistence.create(this))
+        val repository = SkipperRepository(InstalledAppsService(packageManager), injectPersistence())
         viewModel = EditAppAssociationsViewModel(appPackageName, repository)
 
         configureEntriesPackagesRecyclerView.adapter = ClickableWordsAdapter(object : ClickableWordsAdapter.Callback {

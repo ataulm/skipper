@@ -3,6 +3,7 @@
     package="com.ataulm.skipper">
 
     <application
+        android:name="SkipperApplication"
         android:allowBackup="true"
         android:fullBackupContent="true"
         android:icon="@drawable/ic_launcher"

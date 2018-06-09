@@ -16,7 +16,7 @@ class SkipperSettingsActivity : AppCompatActivity() {
         setContentView(R.layout.activity_configure_apps)
 
         // TODO: move this to viewmodel provider otherwise we don't get benefits of viewmodel
-        val viewModel = SkipperSettingsViewModel(SkipperRepository(InstalledAppsService(packageManager), SharedPreferencesSkipperPersistence.create(this)))
+        val viewModel = SkipperSettingsViewModel(SkipperRepository(InstalledAppsService(packageManager), injectPersistence()))
 
         appsRecyclerView.adapter = AppsAdapter(object : AppsAdapter.Callback {
             override fun onClick(appWordAssociations: AppWordAssociations) {
