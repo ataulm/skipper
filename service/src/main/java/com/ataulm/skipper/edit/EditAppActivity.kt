@@ -25,7 +25,7 @@ class EditAppActivity : AppCompatActivity() {
 
         val appPackageName = AppPackageName(intent.getStringExtra(EXTRA_PACKAGE_NAME)) // TODO: should fetch App to get app title
         title = "Edit app \"${appPackageName.packageName}\"" // TODO: string resources
-        val viewModelProvider = ViewModelProviders.of(this, SkipperViewModelProvider(SkipperRepository(InstalledAppsService(packageManager), injectPersistence())))
+        val viewModelProvider = ViewModelProviders.of(this, EditAppViewModelProvider(appPackageName, SkipperRepository(InstalledAppsService(packageManager), injectPersistence())))
         viewModel = viewModelProvider.get(EditAppViewModel::class.java)
 
         wordsRecyclerView.adapter = ClickableWordsAdapter(object : ClickableWordsAdapter.Callback {
