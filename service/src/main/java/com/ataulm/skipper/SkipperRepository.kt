@@ -5,8 +5,6 @@ import android.arch.lifecycle.MutableLiveData
 
 class SkipperRepository(private val installedAppsService: InstalledAppsService, private val skipperPersistence: SkipperPersistence) {
 
-    // TODO: this isn't so much live since it will never send updates when new apps are installed
-    // is there a way to mark it as "always request new data on subscribe"?
     fun installedApps(): LiveData<List<App>> {
         return InstalledAppsLiveData(installedAppsService)
     }
