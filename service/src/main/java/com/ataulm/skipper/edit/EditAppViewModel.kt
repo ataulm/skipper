@@ -7,7 +7,7 @@ import com.ataulm.skipper.ClickableWord
 import com.ataulm.skipper.SkipperRepository
 import com.ataulm.skipper.observer.Event
 
-class EditAppAssociationsViewModel(private val appPackageName: AppPackageName, private val repository: SkipperRepository) {
+class EditAppViewModel(private val appPackageName: AppPackageName, private val repository: SkipperRepository) {
 
     private val eventsLiveData = MutableLiveData<Event<EditScreenEvent>>()
 

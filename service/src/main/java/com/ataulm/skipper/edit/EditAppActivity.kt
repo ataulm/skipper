@@ -8,14 +8,14 @@ import com.ataulm.skipper.observer.DataObserver
 import com.ataulm.skipper.observer.EventObserver
 import kotlinx.android.synthetic.main.activity_edit_app_associations.*
 
-class EditAppAssociationsActivity : AppCompatActivity() {
+class EditAppActivity : AppCompatActivity() {
 
     companion object {
 
         const val EXTRA_PACKAGE_NAME = "EXTRA_PACKAGE_NAME"
     }
 
-    private lateinit var viewModel: EditAppAssociationsViewModel
+    private lateinit var viewModel: EditAppViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -24,7 +24,7 @@ class EditAppAssociationsActivity : AppCompatActivity() {
         val appPackageName = AppPackageName(intent.getStringExtra(EXTRA_PACKAGE_NAME)) // TODO: should fetch App to get app title
         title = "Edit app \"${appPackageName.packageName}\"" // TODO: string resources
         val repository = SkipperRepository(InstalledAppsService(packageManager), injectPersistence())
-        viewModel = EditAppAssociationsViewModel(appPackageName, repository)
+        viewModel = EditAppViewModel(appPackageName, repository)
 
         configureEntriesPackagesRecyclerView.adapter = ClickableWordsAdapter(object : ClickableWordsAdapter.Callback {
 

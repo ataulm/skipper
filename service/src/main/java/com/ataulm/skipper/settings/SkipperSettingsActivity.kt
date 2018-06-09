@@ -5,7 +5,7 @@ import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.RecyclerView
 import com.ataulm.skipper.*
-import com.ataulm.skipper.edit.EditAppAssociationsActivity
+import com.ataulm.skipper.edit.EditAppActivity
 import com.ataulm.skipper.observer.DataObserver
 import com.ataulm.skipper.observer.EventObserver
 import kotlinx.android.synthetic.main.activity_configure_apps.*
@@ -30,8 +30,8 @@ class SkipperSettingsActivity : AppCompatActivity() {
     }
 
     private fun handle(event: OpenEditScreenEvent) {
-        val intent = Intent(this@SkipperSettingsActivity, EditAppAssociationsActivity::class.java)
-                .putExtra(EditAppAssociationsActivity.EXTRA_PACKAGE_NAME, event.app.packageName)
+        val intent = Intent(this@SkipperSettingsActivity, EditAppActivity::class.java)
+                .putExtra(EditAppActivity.EXTRA_PACKAGE_NAME, event.app.packageName)
         startActivity(intent)
     }
 }
