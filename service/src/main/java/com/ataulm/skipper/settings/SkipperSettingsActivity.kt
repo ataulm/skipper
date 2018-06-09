@@ -1,5 +1,6 @@
 package com.ataulm.skipper.settings
 
+import android.arch.lifecycle.ViewModelProviders
 import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
@@ -19,8 +20,8 @@ class SkipperSettingsActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_configure_apps)
 
-        // TODO: move this to viewmodel provider otherwise we don't get benefits of viewmodel
-        val viewModel = SkipperSettingsViewModel(SkipperRepository(InstalledAppsService(packageManager), injectPersistence()))
+        val viewModelProvider = ViewModelProviders.of(this, SkipperViewModelProvider(SkipperRepository(InstalledAppsService(packageManager), injectPersistence())))
+        val viewModel = viewModelProvider.get(SkipperSettingsViewModel::class.java)
 
         appsRecyclerView.adapter = AppsAdapter(object : AppsAdapter.Callback {
             override fun onClick(appWordAssociations: AppWordAssociations) {
