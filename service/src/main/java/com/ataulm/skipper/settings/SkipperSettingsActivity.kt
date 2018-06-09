@@ -29,16 +29,14 @@ class SkipperSettingsActivity : AppCompatActivity() {
             }
         })
 
-        viewModel.events().observe(this, EventObserver { handleEvent() })
+        viewModel.events().observe(this, EventObserver { handle(it) })
         viewModel.apps().observe(this, DataObserver { appsRecyclerView.updateApps(it) })
     }
 
-    private fun handleEvent(): (OpenEditScreenEvent) -> Unit {
-        return {
-            val intent = Intent(this@SkipperSettingsActivity, EditAppActivity::class.java)
-                    .putExtra(EditAppActivity.EXTRA_PACKAGE_NAME, it.app.packageName)
-            startActivity(intent)
-        }
+    private fun handle(event: OpenEditScreenEvent) {
+        val intent = Intent(this@SkipperSettingsActivity, EditAppActivity::class.java)
+                .putExtra(EditAppActivity.EXTRA_PACKAGE_NAME, event.app.packageName)
+        startActivity(intent)
     }
 }
 
