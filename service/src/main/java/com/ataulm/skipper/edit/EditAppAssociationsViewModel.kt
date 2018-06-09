@@ -1,15 +1,22 @@
 package com.ataulm.skipper.edit
 
 import android.arch.lifecycle.LiveData
+import android.arch.lifecycle.MutableLiveData
 import com.ataulm.skipper.AppPackageName
 import com.ataulm.skipper.ClickableWord
 import com.ataulm.skipper.SkipperRepository
+import com.ataulm.skipper.observer.Event
 
 class EditAppAssociationsViewModel(private val appPackageName: AppPackageName, private val repository: SkipperRepository) {
 
-    fun clickableWords(): LiveData<List<ClickableWord>> {
-        val clickableWords = repository.clickableWords(appPackageName)
-        return clickableWords
+    private val eventsLiveData = MutableLiveData<Event<EditScreenEvent>>()
+
+    fun data(): LiveData<List<ClickableWord>> {
+        return repository.clickableWords(appPackageName)
+    }
+
+    fun events(): LiveData<Event<EditScreenEvent>> {
+        return eventsLiveData
     }
 
     fun onClickAdd(word: ClickableWord) {
@@ -21,6 +28,11 @@ class EditAppAssociationsViewModel(private val appPackageName: AppPackageName, p
     }
 
     fun onClickDismiss() {
-        // TODO: send close event
+        eventsLiveData.postValue(Event(EditScreenEvent.DismissEditScreen()))
+    }
+
+    sealed class EditScreenEvent {
+
+        class DismissEditScreen : EditScreenEvent()
     }
 }

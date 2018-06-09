@@ -1,13 +1,11 @@
 package com.ataulm.skipper.edit
 
-import android.arch.lifecycle.Observer
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.RecyclerView
 import com.ataulm.skipper.*
 import com.ataulm.skipper.observer.DataObserver
-import com.ataulm.skipper.settings.AppWordAssociations
-import com.ataulm.skipper.settings.AppsAdapter
+import com.ataulm.skipper.observer.EventObserver
 import kotlinx.android.synthetic.main.activity_edit_app_associations.*
 
 class EditAppAssociationsActivity : AppCompatActivity() {
@@ -42,18 +40,20 @@ class EditAppAssociationsActivity : AppCompatActivity() {
                 configureEntriesEditText.text = null
             }
         }
+
+        viewModel.events().observe(this, EventObserver {
+            finish()
+        })
     }
 
     override fun onResume() {
         super.onResume()
-        viewModel.clickableWords().observe(this, DataObserver<List<ClickableWord>> {
+        viewModel.data().observe(this, DataObserver<List<ClickableWord>> {
             configureEntriesPackagesRecyclerView.updateApps(it)
         })
     }
 
     override fun onBackPressed() {
-        // TODO: don't call super, use nav events
-        super.onBackPressed()
         viewModel.onClickDismiss()
     }
 
