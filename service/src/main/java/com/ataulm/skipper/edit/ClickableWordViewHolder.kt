@@ -1,9 +1,11 @@
-package com.ataulm.skipper
+package com.ataulm.skipper.edit
 
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.ataulm.skipper.ClickableWord
+import com.ataulm.skipper.R
 import kotlinx.android.synthetic.main.item_clickable_word.view.*
 
 class ClickableWordViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {

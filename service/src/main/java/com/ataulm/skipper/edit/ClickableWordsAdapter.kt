@@ -1,8 +1,8 @@
-package com.ataulm.skipper
+package com.ataulm.skipper.edit
 
 import android.support.v7.widget.RecyclerView
 import android.view.ViewGroup
-import kotlinx.android.synthetic.main.item_clickable_word.view.*
+import com.ataulm.skipper.ClickableWord
 
 class ClickableWordsAdapter(private val callback: Callback) : RecyclerView.Adapter<ClickableWordViewHolder>() {
 
