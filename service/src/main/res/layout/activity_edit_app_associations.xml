@@ -1,14 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
 
     <android.support.v7.widget.RecyclerView
-        android:id="@+id/clickableWordsRecyclerView"
+        android:id="@+id/configureEntriesPackagesRecyclerView"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1" />
+        android:layout_weight="1"
+        android:clipToPadding="false"
+        android:paddingBottom="16dp"
+        android:paddingTop="12dp"
+        app:layoutManager="android.support.v7.widget.LinearLayoutManager" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -16,17 +21,17 @@
         android:orientation="horizontal">
 
         <EditText
-            android:id="@+id/addClickableWordEditText"
+            android:id="@+id/configureEntriesEditText"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:inputType="text" />
 
         <Button
-            android:id="@+id/addClickableWordButton"
+            android:id="@+id/configureEntriesAddWordButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Add" />
+            android:text="@string/button_add" />
 
     </LinearLayout>
 

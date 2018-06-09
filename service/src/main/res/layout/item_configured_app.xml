@@ -9,13 +9,13 @@
     android:paddingTop="8dp">
 
     <ImageView
-        android:id="@+id/packageIconImageView"
+        android:id="@+id/appIconImageView"
         android:layout_width="36dp"
         android:layout_height="36dp"
         android:importantForAccessibility="no" />
 
     <TextView
-        android:id="@+id/packageNameTextView"
+        android:id="@+id/appNameTextView"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginEnd="16dp"
@@ -23,8 +23,8 @@
         android:layout_weight="1"
         android:textSize="16sp" />
 
-    <CheckBox
-        android:id="@+id/packageCheckBox"
+    <ImageView
+        android:id="@+id/statusImageView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
 

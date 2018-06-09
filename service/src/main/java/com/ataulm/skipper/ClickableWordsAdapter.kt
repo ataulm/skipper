@@ -1,8 +1,7 @@
-package com.ataulm.skipper.settings
+package com.ataulm.skipper
 
 import android.support.v7.widget.RecyclerView
 import android.view.ViewGroup
-import com.ataulm.skipper.ClickableWord
 import kotlinx.android.synthetic.main.item_clickable_word.view.*
 
 class ClickableWordsAdapter(private val callback: Callback) : RecyclerView.Adapter<ClickableWordViewHolder>() {
@@ -20,9 +19,7 @@ class ClickableWordsAdapter(private val callback: Callback) : RecyclerView.Adapt
 
     override fun onBindViewHolder(holder: ClickableWordViewHolder, position: Int) {
         val clickableWord = list[position]
-        holder.itemView.setOnClickListener { callback.onClickConfigure(clickableWord) }
-        holder.itemView.clickableWordDeleteButton.setOnClickListener { callback.onClickDelete(clickableWord) }
-        holder.itemView.clickableWordTextView.text = clickableWord.word
+        holder.bind(clickableWord, callback)
     }
 
     override fun getItemCount(): Int {
@@ -36,7 +33,5 @@ class ClickableWordsAdapter(private val callback: Callback) : RecyclerView.Adapt
     interface Callback {
 
         fun onClickDelete(word: ClickableWord)
-
-        fun onClickConfigure(word: ClickableWord)
     }
 }

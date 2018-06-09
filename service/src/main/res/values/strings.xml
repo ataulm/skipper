@@ -1,6 +1,8 @@
 <resources>
-  <string name="app_name">Skipper</string>
-  <string name="settings_title">Skipper Settings</string>
-  <string name="button_save">Save</string>
-  <string name="content_desc_delete">Delete</string>
+    <string name="app_name">Skipper</string>
+    <string name="settings_title">Skipper Settings</string>
+    <string name="button_add">Add</string>
+    <string name="content_desc_delete">Delete</string>
+    <string name="content_desc_active">Active</string>
+    <string name="content_desc_inactive">Inactive</string>
 </resources>

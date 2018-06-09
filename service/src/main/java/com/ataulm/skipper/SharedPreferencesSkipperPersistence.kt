@@ -8,7 +8,7 @@ class SharedPreferencesSkipperPersistence private constructor(private val shared
     companion object {
 
         private const val FILE = "clickable_words"
-        private const val KEY_CLICKABLE_WORDS_LIST = "clickable_words_list"
+        private const val KEY_TARGETED_APPS_LIST = "targeted_apps_list"
 
         fun create(context: Context): SharedPreferencesSkipperPersistence {
             val sharedPrefs = context.getSharedPreferences(FILE, Context.MODE_PRIVATE)
@@ -18,63 +18,59 @@ class SharedPreferencesSkipperPersistence private constructor(private val shared
 
     private val callbacks = mutableSetOf<SkipperPersistence.Callback>()
 
-    override fun appsAssociatedWith(clickableWord: ClickableWord): List<AppPackageName> {
-        return sharedPrefs.getStringSet(clickableWord.word, emptySet()).toList().map { AppPackageName(it) }
+    override fun targetedApps(): List<AppPackageName> {
+        return targetedAppsImmutable().map { AppPackageName(it) }
     }
 
-    override fun updateAppsAssociatedWithWord(clickableWord: ClickableWord, packageNames: Set<AppPackageName>) {
-        val packageNamesStringSet = packageNames.map { it.packageName }.toSet()
-        sharedPrefs.edit().putStringSet(clickableWord.word, packageNamesStringSet).apply()
+    override fun clickableWords(app: AppPackageName): List<ClickableWord> {
+        return sharedPrefs.getStringSet(app.packageName, emptySet()).map { ClickableWord(it) }
     }
 
-    override fun clickableWords(): List<ClickableWord> {
-        return immutableWords().toList().map { ClickableWord(it) }
+    override fun add(app: AppPackageName, clickableWord: ClickableWord) {
+        val set = sharedPrefs.getStringSet(app.packageName, emptySet()).toMutableSet()
+        if (set.add(clickableWord.word)) {
+            updateWordAssociationsForTargetedApp(app, set.map { ClickableWord(it) }.toTypedArray())
+        }
     }
 
-    override fun add(clickableWord: ClickableWord) {
-        val list = immutableWords().toMutableList()
-        list.add(clickableWord.word)
-        persistClickableWords(list)
+    override fun delete(app: AppPackageName, clickableWord: ClickableWord) {
+        val set = sharedPrefs.getStringSet(app.packageName, emptySet()).toMutableSet()
+        if (set.remove(clickableWord.word)) {
+            updateWordAssociationsForTargetedApp(app, set.map { ClickableWord(it) }.toTypedArray())
+        }
     }
 
-    override fun delete(clickableWord: ClickableWord) {
-        val list = immutableWords().toMutableList()
-        list.remove(clickableWord.word)
-        persistClickableWords(list)
-
-        removeAppsAssociatedWith(clickableWord)
-    }
-
-    private fun removeAppsAssociatedWith(clickableWord: ClickableWord) {
-        sharedPrefs.edit().remove(clickableWord.word).apply()
-    }
-
-    private fun immutableWords() = sharedPrefs.getStringSet(KEY_CLICKABLE_WORDS_LIST, emptySet())
-
-    private fun persistClickableWords(list: List<String>) {
-        sharedPrefs.edit().putStringSet(KEY_CLICKABLE_WORDS_LIST, list.toSet()).apply()
+    private fun updateWordAssociationsForTargetedApp(app: AppPackageName, words: Array<out ClickableWord>) {
+        val editor = sharedPrefs.edit()
+        val targetedApps = targetedAppsImmutable().toMutableSet()
+        if (words.isEmpty()) {
+            editor.remove(app.packageName)
+            targetedApps.remove(app.packageName)
+        } else {
+            editor.putStringSet(app.packageName, words.map { it.word }.toSet())
+            targetedApps.add(app.packageName)
+        }
+        editor.putStringSet(KEY_TARGETED_APPS_LIST, targetedApps)
+        editor.apply()
     }
 
     override fun addOnChangeListener(callback: SkipperPersistence.Callback) {
         callbacks.add(callback)
         if (callbacks.size == 1) {
-            sharedPrefs.registerOnSharedPreferenceChangeListener(clickableWordsChangedListener)
+            sharedPrefs.registerOnSharedPreferenceChangeListener(dataChangedCallback)
         }
     }
 
     override fun removeChangeListener(callback: SkipperPersistence.Callback) {
         callbacks.remove(callback)
         if (callbacks.isEmpty()) {
-            sharedPrefs.unregisterOnSharedPreferenceChangeListener(clickableWordsChangedListener)
+            sharedPrefs.unregisterOnSharedPreferenceChangeListener(dataChangedCallback)
         }
     }
 
-    private val clickableWordsChangedListener = SharedPreferences.OnSharedPreferenceChangeListener { _, key ->
-        if (key == KEY_CLICKABLE_WORDS_LIST) {
-            val clickableWords = clickableWords()
-            callbacks.forEach({
-                it.onChange(clickableWords)
-            })
-        }
+    private val dataChangedCallback = SharedPreferences.OnSharedPreferenceChangeListener { _, _ ->
+        callbacks.forEach({ it.onDataChanged() })
     }
+
+    private fun targetedAppsImmutable() = sharedPrefs.getStringSet(KEY_TARGETED_APPS_LIST, emptySet())
 }

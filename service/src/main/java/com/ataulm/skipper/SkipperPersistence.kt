@@ -2,15 +2,13 @@ package com.ataulm.skipper
 
 interface SkipperPersistence {
 
-    fun appsAssociatedWith(clickableWord: ClickableWord): List<AppPackageName>
+    fun targetedApps(): List<AppPackageName>
 
-    fun updateAppsAssociatedWithWord(clickableWord: ClickableWord, packageNames: Set<AppPackageName>)
+    fun clickableWords(app: AppPackageName): List<ClickableWord>
 
-    fun clickableWords(): List<ClickableWord>
+    fun add(app: AppPackageName, clickableWord: ClickableWord)
 
-    fun add(clickableWord: ClickableWord)
-
-    fun delete(clickableWord: ClickableWord)
+    fun delete(app: AppPackageName, clickableWord: ClickableWord)
 
     fun addOnChangeListener(callback: SkipperPersistence.Callback)
 
@@ -18,6 +16,6 @@ interface SkipperPersistence {
 
     interface Callback {
 
-        fun onChange(clickableWords: List<ClickableWord>)
+        fun onDataChanged()
     }
 }
