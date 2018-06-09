@@ -1,11 +1,13 @@
 package com.ataulm.skipper.edit
 
+import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.RecyclerView
 import com.ataulm.skipper.*
 import com.ataulm.skipper.observer.DataObserver
 import com.ataulm.skipper.observer.EventObserver
+import com.ataulm.skipper.settings.SkipperViewModelProvider
 import kotlinx.android.synthetic.main.activity_edit_app_associations.*
 
 class EditAppActivity : AppCompatActivity() {
@@ -23,8 +25,8 @@ class EditAppActivity : AppCompatActivity() {
 
         val appPackageName = AppPackageName(intent.getStringExtra(EXTRA_PACKAGE_NAME)) // TODO: should fetch App to get app title
         title = "Edit app \"${appPackageName.packageName}\"" // TODO: string resources
-        val repository = SkipperRepository(InstalledAppsService(packageManager), injectPersistence())
-        viewModel = EditAppViewModel(appPackageName, repository)
+        val viewModelProvider = ViewModelProviders.of(this, SkipperViewModelProvider(SkipperRepository(InstalledAppsService(packageManager), injectPersistence())))
+        viewModel = viewModelProvider.get(EditAppViewModel::class.java)
 
         wordsRecyclerView.adapter = ClickableWordsAdapter(object : ClickableWordsAdapter.Callback {
 
