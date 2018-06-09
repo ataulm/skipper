@@ -39,5 +39,3 @@ class SkipperSettingsActivity : AppCompatActivity() {
 private fun RecyclerView.updateApps(list: List<AppWordAssociations>) {
     (adapter as AppsAdapter).update(list)
 }
-
-data class OpenEditScreenEvent(val app: AppPackageName)
