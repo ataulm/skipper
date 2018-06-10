@@ -5,4 +5,4 @@
     android:accessibilityFlags="flagIncludeNotImportantViews|flagRetrieveInteractiveWindows"
     android:canRetrieveWindowContent="true"
     android:notificationTimeout="500"
-    android:settingsActivity=".settings.SkipperSettingsActivity" />
+    android:settingsActivity="com.ataulm.skipper.settings.SkipperSettingsActivity" />
