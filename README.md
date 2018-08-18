@@ -16,3 +16,5 @@ Write an accessibility service that will automatically click "Continue Watching"
 - Allow user to specify package names for clickable words (use a picker Activity)
 - Allow user to enable/disable entries
 - Update the service's name and add description/summary
+
+[Thanks Flo for the sik name](https://github.com/florina-muntenescu)
